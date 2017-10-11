@@ -1,6 +1,6 @@
 ﻿using Com.Moonlay.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,30 +42,36 @@ namespace Com.Moonlay.EntityFrameworkCore
                 }
                 else if (config is IEntity<Guid>)
                 {
-                    builder.Property("Id").HasValueGenerator<GuidPKeyGenerator>();
+                    builder.Property("Id").HasValueGenerator<GuidPKeyGenerator>(); 
                 }
 
                 if (config is IAuditEntity)
                 {
                     builder.Property("_LastModifiedBy")
+                        .IsRequired()
                         .HasMaxLength(255);
 
                     builder.Property("_LastModifiedAgent")
+                        .IsRequired()
                         .HasMaxLength(255);
 
                     builder.Property("_CreatedBy")
+                       .IsRequired()
                        .HasMaxLength(255);
 
                     builder.Property("_CreatedAgent")
+                        .IsRequired()
                         .HasMaxLength(255);
                 }
 
                 if (config is ISoftEntity)
                 {
                     builder.Property("_DeletedBy")
-                       .HasMaxLength(255);
+                        .IsRequired()
+                        .HasMaxLength(255);
 
                     builder.Property("_DeletedAgent")
+                        .IsRequired()
                         .HasMaxLength(255);
                 }
 
