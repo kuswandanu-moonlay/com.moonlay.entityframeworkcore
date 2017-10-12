@@ -96,8 +96,9 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 
             modelBuilder.Entity("UnitTest.Models.TestEntitySoftOnly", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Code");
+
+                    b.Property<string>("Identity");
 
                     b.Property<string>("_DeletedAgent")
                         .IsRequired()
@@ -111,7 +112,7 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 
                     b.Property<bool>("_IsDeleted");
 
-                    b.HasKey("Id");
+                    b.HasKey("Code", "Identity");
 
                     b.ToTable("TestEntitySoftOnly");
                 });

@@ -1,12 +1,15 @@
 ﻿using Com.Moonlay.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace UnitTest.Models
 {
     public class TestEntity : BaseEntity<string>, IAuditEntity, ISoftEntity
     {
+        
+
         public DateTime _CreatedUtc { get; set; }
         public string _CreatedBy { get; set; }
         public string _CreatedAgent { get; set; }

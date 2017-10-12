@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 using System.Collections.Generic;
 
 namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 {
-    public partial class Intial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,8 +50,8 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                 name: "TestEntitySoftOnly",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Identity = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     _DeletedAgent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _DeletedBy = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _DeletedUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -60,7 +59,7 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestEntitySoftOnly", x => x.Id);
+                    table.PrimaryKey("PK_TestEntitySoftOnly", x => new { x.Code, x.Identity });
                 });
         }
 

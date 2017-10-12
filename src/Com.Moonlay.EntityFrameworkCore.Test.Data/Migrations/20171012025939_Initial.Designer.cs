@@ -12,8 +12,8 @@ using Test;
 namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 {
     [DbContext(typeof(UnitDbContext))]
-    [Migration("20171011114830_Intial")]
-    partial class Intial
+    [Migration("20171012025939_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -97,8 +97,9 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 
             modelBuilder.Entity("UnitTest.Models.TestEntitySoftOnly", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("Code");
+
+                    b.Property<string>("Identity");
 
                     b.Property<string>("_DeletedAgent")
                         .IsRequired()
@@ -112,7 +113,7 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 
                     b.Property<bool>("_IsDeleted");
 
-                    b.HasKey("Id");
+                    b.HasKey("Code", "Identity");
 
                     b.ToTable("TestEntitySoftOnly");
                 });
