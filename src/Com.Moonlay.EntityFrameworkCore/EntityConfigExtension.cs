@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -10,6 +11,7 @@ using System.Reflection;
 
 namespace Com.Moonlay.EntityFrameworkCore
 {
+    
     public static class EntityConfigExtension
     {
         public static void ConfigAllEntities(this ModelBuilder builder, Assembly assembly)
@@ -26,6 +28,21 @@ namespace Com.Moonlay.EntityFrameworkCore
                 return assembly.DefinedTypes.Where(x => !x.IsAbstract && x.IsSubclassOf(baseClass));
         }
 
+        private static void DefineKeys(this Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder builder)
+        {
+            var keyProperties = builder.Metadata.ClrType.GetProperties().Where(p => p.GetCustomAttribute(typeof(KeyAttribute)) != null).Select(o=>o.Name);
+            if (keyProperties.Count() > 0)
+            {
+                if (!keyProperties.Contains("Id"))
+                    builder.Ignore("Id");
+
+                builder.HasKey(keyProperties.ToArray());
+            }
+            else
+                builder.HasKey("Id");
+            
+        }
+
         private static void AddModelBuilder(this ModelBuilder modelBuilder, Assembly assembly)
         {
             var entities = assembly.GetDerivedClass(typeof(IEntity)).Select(Activator.CreateInstance);
@@ -34,7 +51,7 @@ namespace Com.Moonlay.EntityFrameworkCore
             {
                 var builder = modelBuilder.Entity(config.GetType());
 
-                builder.HasKey("Id");
+                builder.DefineKeys();
 
                 if (config is IEntity<string>)
                 {
