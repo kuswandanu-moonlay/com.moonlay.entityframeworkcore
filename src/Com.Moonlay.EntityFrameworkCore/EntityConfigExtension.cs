@@ -17,7 +17,6 @@ namespace Com.Moonlay.EntityFrameworkCore
         public static void ConfigAllEntities(this ModelBuilder builder, Assembly assembly)
         {
             builder.AddModelBuilder(assembly);
-            builder.SetSoftDeleteFilter();
         }
 
         private static IEnumerable<Type> GetDerivedClass(this Assembly assembly, Type baseClass)
@@ -28,9 +27,9 @@ namespace Com.Moonlay.EntityFrameworkCore
                 return assembly.DefinedTypes.Where(x => !x.IsAbstract && x.IsSubclassOf(baseClass));
         }
 
-        private static void DefineKeys(this Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder builder)
+        private static void DefineKeys(this Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder builder, object entity)
         {
-            var keyProperties = builder.Metadata.ClrType.GetProperties().Where(p => p.GetCustomAttribute(typeof(KeyAttribute)) != null).Select(o=>o.Name);
+            var keyProperties = builder.Metadata.ClrType.GetProperties().Where(p => p.GetCustomAttribute(typeof(KeyAttribute)) != null).Select(p => p.Name);
             if (keyProperties.Count() > 0)
             {
                 if (!keyProperties.Contains("Id"))
@@ -39,30 +38,31 @@ namespace Com.Moonlay.EntityFrameworkCore
                 builder.HasKey(keyProperties.ToArray());
             }
             else
+            {
                 builder.HasKey("Id");
-            
+
+                if (entity is IEntity<string>)
+                {
+                    builder.Property("Id").HasMaxLength(32).HasValueGenerator<StringPKeyGenerator>();
+                }
+                else if (entity is IEntity<Guid>)
+                {
+                    builder.Property("Id").HasValueGenerator<GuidPKeyGenerator>();
+                }
+            }
         }
 
         private static void AddModelBuilder(this ModelBuilder modelBuilder, Assembly assembly)
         {
             var entities = assembly.GetDerivedClass(typeof(IEntity)).Select(Activator.CreateInstance);
             
-            foreach (var config in entities)
+            foreach (var entity in entities)
             {
-                var builder = modelBuilder.Entity(config.GetType());
+                var builder = modelBuilder.Entity(entity.GetType());
 
-                builder.DefineKeys();
+                builder.DefineKeys(entity);
 
-                if (config is IEntity<string>)
-                {
-                    builder.Property("Id").HasMaxLength(32).HasValueGenerator<StringPKeyGenerator>();
-                }
-                else if (config is IEntity<Guid>)
-                {
-                    builder.Property("Id").HasValueGenerator<GuidPKeyGenerator>(); 
-                }
-
-                if (config is IAuditEntity)
+                if (entity is IAuditEntity)
                 {
                     builder.Property("_LastModifiedBy")
                         .IsRequired()
@@ -81,8 +81,14 @@ namespace Com.Moonlay.EntityFrameworkCore
                         .HasMaxLength(255);
                 }
 
-                if (config is ISoftEntity)
+                if (entity is ISoftEntity)
                 {
+                    var parameter = Expression.Parameter(builder.Metadata.ClrType, "p");
+                    var member = Expression.Property(parameter, "_IsDeleted");
+                    var constant = Expression.Constant(false);
+                    var filterDeleted = Expression.Equal(member, constant);
+
+                    builder.HasQueryFilter(Expression.Lambda(filterDeleted, parameter));
                     builder.Property("_DeletedBy")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -92,21 +98,6 @@ namespace Com.Moonlay.EntityFrameworkCore
                         .HasMaxLength(255);
                 }
 
-            }
-        }
-
-        private static void SetSoftDeleteFilter(this ModelBuilder modelBuilder)
-        {
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                if (typeof(ISoftEntity).IsAssignableFrom(entityType.ClrType))
-                {
-                    var parameter = Expression.Parameter(entityType.ClrType, "p");
-                    var member = Expression.Property(parameter, "_IsDeleted");
-                    var constant = Expression.Constant(false);
-                    var filterHidden = Expression.Equal(member, constant);
-                    entityType.QueryFilter = Expression.Lambda(filterHidden, parameter);
-                }
             }
         }
     }

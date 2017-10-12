@@ -8,8 +8,12 @@ namespace UnitTest.Models
 {
     public class TestEntity : BaseEntity<string>, IAuditEntity, ISoftEntity
     {
-        
 
+        [Key]
+        public string Code { get; set; }
+
+        [Key]
+        public string Identity { get; set; }
         public DateTime _CreatedUtc { get; set; }
         public string _CreatedBy { get; set; }
         public string _CreatedAgent { get; set; }
