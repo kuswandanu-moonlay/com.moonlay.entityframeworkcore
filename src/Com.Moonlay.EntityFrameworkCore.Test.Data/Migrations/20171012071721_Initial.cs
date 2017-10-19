@@ -12,7 +12,8 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                 name: "TestEntity",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(32)", maxLength: 32, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Identity = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     _CreatedAgent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _CreatedBy = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _CreatedUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -26,7 +27,7 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TestEntity", x => x.Id);
+                    table.PrimaryKey("PK_TestEntity", x => new { x.Code, x.Identity });
                 });
 
             migrationBuilder.CreateTable(
