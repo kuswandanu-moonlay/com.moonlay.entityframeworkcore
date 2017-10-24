@@ -16,9 +16,8 @@ Install-Package Com.Moonlay.EntityFrameworkCore
 dotnet add package Com.Moonlay.EntityFrameworkCore
 ```
 
-## How To Use
-
-## Enable .Net Core EF CLI
+## Extend Ef Core Migrations
+### Enable .Net Core EF CLI
 Add this code into file (Project Name).csproj
 ```xml
 <ItemGroup>
@@ -28,7 +27,7 @@ Add this code into file (Project Name).csproj
 ```
 Add nuget package `Microsoft.EntityFrameworkCore.Design`
 
-### Implement Com.Moonlay.Models.StandardEntity
+### Implement `Com.Moonlay.Models.StandardEntity` into your model/entity
 
 ```cs
 public class Model : StandardEntity
