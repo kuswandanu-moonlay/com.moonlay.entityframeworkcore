@@ -12,7 +12,7 @@ using Test;
 namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 {
     [DbContext(typeof(UnitDbContext))]
-    [Migration("20171012071721_Initial")]
+    [Migration("20171012074014_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,8 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                     b.Property<string>("Code");
 
                     b.Property<string>("Identity");
+
+                    b.Property<string>("Id");
 
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
@@ -100,6 +102,8 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                     b.Property<string>("Code");
 
                     b.Property<string>("Identity");
+
+                    b.Property<int>("Id");
 
                     b.Property<string>("_DeletedAgent")
                         .IsRequired()
