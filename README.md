@@ -18,7 +18,7 @@ dotnet add package Com.Moonlay.EntityFrameworkCore
 
 ## How To Use
 
-## Preparation
+## Enable .Net Core EF CLI
 Add this code into file (Project Name).csproj
 ```xml
 <ItemGroup>
