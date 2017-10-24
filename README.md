@@ -37,7 +37,7 @@ public class Model : StandardEntity
 }
 ```
 
-### Abstract class `BaseDbContext`
+### Create your DbContext by implement `BaseDbContext`
 ```cs
 public class MyDbContext : BaseDbContext 
 {
