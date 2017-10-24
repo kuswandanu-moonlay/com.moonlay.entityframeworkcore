@@ -49,7 +49,7 @@ Open powershell/command prompt(windows based) or bash/sh (unix based). Inside yo
 ```
 dotnet ef migrations add Initial
 ```
-You will find all class are implement `StandardEntity` generated as Tables in folder (Project Folder)/Migrations.
+You will find all classes that implement `IEntity` will be identified by the ef-migrations tool as tables.
 
 
 
