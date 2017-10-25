@@ -27,6 +27,8 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
 
                     b.Property<string>("Identity");
 
+                    b.Property<string>("Id");
+
                     b.Property<string>("_CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
@@ -99,6 +101,8 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                     b.Property<string>("Code");
 
                     b.Property<string>("Identity");
+
+                    b.Property<int>("Id");
 
                     b.Property<string>("_DeletedAgent")
                         .IsRequired()

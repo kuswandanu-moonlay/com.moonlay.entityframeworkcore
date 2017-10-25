@@ -32,9 +32,6 @@ namespace Com.Moonlay.EntityFrameworkCore
             var keyProperties = builder.Metadata.ClrType.GetProperties().Where(p => p.GetCustomAttribute(typeof(KeyAttribute)) != null).Select(p => p.Name);
             if (keyProperties.Count() > 0)
             {
-                if (!keyProperties.Contains("Id"))
-                    builder.Ignore("Id");
-
                 builder.HasKey(keyProperties.ToArray());
             }
             else

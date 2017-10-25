@@ -14,6 +14,7 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                 {
                     Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Identity = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     _CreatedAgent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _CreatedBy = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _CreatedUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -53,6 +54,7 @@ namespace Com.Moonlay.EntityFrameworkCore.Test.Data.Migrations
                 {
                     Code = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Identity = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     _DeletedAgent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _DeletedBy = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     _DeletedUtc = table.Column<DateTime>(type: "datetime2", nullable: false),

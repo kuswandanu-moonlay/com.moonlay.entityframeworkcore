@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Test;
 using UnitTest.Models;
 using Xunit;
@@ -33,7 +34,7 @@ namespace Com.Moonlay.EntityFrameworkCore.Test
         }
 
         [Fact(DisplayName ="Filter SoftDelete")]
-        public void Test1()
+        public async Task Test1()
         {
             var context = new UnitDbContext();
             context.Database.Migrate();
@@ -49,14 +50,14 @@ namespace Com.Moonlay.EntityFrameworkCore.Test
             set.Add(entity);
             context.SaveChanges();
 
-            var record = set.FirstOrDefaultAsync(o => o.Code == code).Result;
+            var record = await set.FirstOrDefaultAsync(o=>o.Code == code);
             Assert.Equal(null, record);
         }
 
         [Fact(DisplayName ="Builder Entity Types")]
         public void Test2()
         {
-            new ModelBuilder(new ConventionSet()).ConfigAllEntities(typeof(UnitDbContext).Assembly);
+            new ModelBuilder(new ConventionSet { }).ConfigAllEntities(typeof(UnitDbContext).Assembly);
         }
     }
 }
