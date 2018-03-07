@@ -2,18 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>Com.Moonlay.EntityFrameworkCore</PackageId>
-    <PackageVersion>1.0.0-alpha-20171024-003</PackageVersion>
+    <PackageId>Com.Moonlay.EntityFrameworkCore</PackageId> 
     <Authors>Moonlay</Authors>
     <Description>Moonlay EntityFrameworkCore</Description>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageReleaseNotes>First release</PackageReleaseNotes>
+    <PackageReleaseNotes>1.0.1-alpha
+- compliance to Com.Moonlay.Models 1.0.4-alpha-1</PackageReleaseNotes>
     <Copyright>Copyright 2017 (c) Moonlay. All rights reserved.</Copyright>
     <PackageTags>EntityFrameworkCore, Moonlay</PackageTags>
+    <Version>1.0.1-alpha</Version>
+    <PackageProjectUrl>https://github.com/moonlay/com.moonlay.entityframeworkcore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/moonlay/com.moonlay.entityframeworkcore</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Com.Moonlay.Models" Version="1.0.0-alpha-10122017-001" />
+    <PackageReference Include="Com.Moonlay.Models" Version="1.0.4-alpha-1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
   </ItemGroup>
 

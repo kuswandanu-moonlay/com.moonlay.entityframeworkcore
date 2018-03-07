@@ -11,7 +11,7 @@ using System.Reflection;
 
 namespace Com.Moonlay.EntityFrameworkCore
 {
-    
+
     public static class EntityConfigExtension
     {
         public static void ConfigAllEntities(this ModelBuilder builder, Assembly assembly)
@@ -19,12 +19,12 @@ namespace Com.Moonlay.EntityFrameworkCore
             builder.AddModelBuilder(assembly);
         }
 
-        private static IEnumerable<Type> GetDerivedClass(this Assembly assembly, Type baseClass)
+        private static IEnumerable<Type> GetDerivedClass(this Assembly assembly, Type baseType)
         {
-            if (baseClass.IsInterface)
-                return assembly.DefinedTypes.Where(x => x.GetInterfaces().Contains(baseClass));
+            if (baseType.IsInterface)
+                return assembly.DefinedTypes.Where(x => x.GetInterfaces().Contains(baseType));
             else
-                return assembly.DefinedTypes.Where(x => !x.IsAbstract && x.IsSubclassOf(baseClass));
+                return assembly.DefinedTypes.Where(x => !x.IsAbstract && x.IsSubclassOf(baseType));
         }
 
         private static void DefineKeys(this Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder builder, object entity)
@@ -52,7 +52,7 @@ namespace Com.Moonlay.EntityFrameworkCore
         private static void AddModelBuilder(this ModelBuilder modelBuilder, Assembly assembly)
         {
             var entities = assembly.GetDerivedClass(typeof(IEntity)).Select(Activator.CreateInstance);
-            
+
             foreach (var entity in entities)
             {
                 var builder = modelBuilder.Entity(entity.GetType());
@@ -61,36 +61,37 @@ namespace Com.Moonlay.EntityFrameworkCore
 
                 if (entity is IAuditEntity)
                 {
-                    builder.Property("_LastModifiedBy")
+                    builder.Property("LastModifiedBy")
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    builder.Property("_LastModifiedAgent")
+                    builder.Property("LastModifiedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
 
-                    builder.Property("_CreatedBy")
+                    builder.Property("CreatedBy")
                        .IsRequired()
                        .HasMaxLength(255);
 
-                    builder.Property("_CreatedAgent")
+                    builder.Property("CreatedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
                 }
 
                 if (entity is ISoftEntity)
                 {
-                    var parameter = Expression.Parameter(builder.Metadata.ClrType, "p");
-                    var member = Expression.Property(parameter, "_IsDeleted");
+                    var parameter = Expression.Parameter(builder.Metadata.ClrType, "IsDeleted");
+                    var member = Expression.Property(parameter, "IsDeleted");
                     var constant = Expression.Constant(false);
                     var filterDeleted = Expression.Equal(member, constant);
 
                     builder.HasQueryFilter(Expression.Lambda(filterDeleted, parameter));
-                    builder.Property("_DeletedBy")
-                        .IsRequired()
+
+                    builder.Property("DeletedBy")                        
+                        .IsRequired()                        
                         .HasMaxLength(255);
 
-                    builder.Property("_DeletedAgent")
+                    builder.Property("DeletedAgent")
                         .IsRequired()
                         .HasMaxLength(255);
                 }

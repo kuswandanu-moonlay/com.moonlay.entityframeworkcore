@@ -1,0 +1,2 @@
+1.0.1-alpha
+- compliance to Com.Moonlay.Models 1.0.4-alpha-1

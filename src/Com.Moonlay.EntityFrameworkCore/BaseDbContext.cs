@@ -24,7 +24,7 @@ namespace Com.Moonlay.EntityFrameworkCore
         public override int SaveChanges()
         {
             foreach (var entry in ChangeTracker.Entries()
-              .Where(p => p.State == EntityState.Deleted))
+              .Where(entry => entry.State == EntityState.Deleted))
                 SoftDelete(entry);
 
 
@@ -36,7 +36,7 @@ namespace Com.Moonlay.EntityFrameworkCore
             if (entry.Entity is ISoftEntity)
             {
                 var entity = entry.Entity as ISoftEntity;
-                entity._IsDeleted = true;
+                entity.IsDeleted = true;
                 entry.State = EntityState.Modified;
             }
         }
